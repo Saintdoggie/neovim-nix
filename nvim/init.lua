@@ -1,104 +1,47 @@
-local cmd = vim.cmd
-local fn = vim.fn
-local opt = vim.o
-local g = vim.g
 
--- <leader> key. Defaults to `\`. Some people prefer space.
--- g.mapleader = ' '
--- g.maplocalleader = ' '
+--if not vim.g.vscode then
+    --require "keymaps";
+--else
+    --require "configs.vscode";
+--end
 
-opt.compatible = false
+vim.g.mapleader = " "
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
--- Enable true colour support
-if fn.has('termguicolors') then
-  opt.termguicolors = true
-end
+vim.cmd [[
+nmap <silent> <c-k> :wincmd k<CR>
+nmap <silent> <c-j> :wincmd j<CR>
+nmap <silent> <c-h> :wincmd h<CR>
+nmap <silent> <c-l> :wincmd l<CR>
+]]
 
--- See :h <option> to see what the options do
+vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
 
--- Search down into subfolders
-opt.path = vim.o.path .. '**'
+-- colors
+vim.cmd.colorscheme("catppuccin-frappe")
 
-opt.number = true
-opt.relativenumber = true
-opt.cursorline = true
-opt.lazyredraw = true
-opt.showmatch = true -- Highlight matching parentheses, etc
-opt.incsearch = true
-opt.hlsearch = true
+--set tabbing to 4 characters
+vim.opt.tabstop = 4;
+vim.opt.shiftwidth = 4;
 
-opt.spell = true
-opt.spelllang = 'en'
+vim.opt.nu = true
+vim.opt.relativenumber = true
 
-opt.expandtab = true
-opt.tabstop = 2
-opt.softtabstop = 2
-opt.shiftwidth = 2
-opt.foldenable = true
-opt.history = 2000
-opt.nrformats = 'bin,hex' -- 'octal'
-opt.undofile = true
-opt.splitright = true
-opt.splitbelow = true
-opt.cmdheight = 0
+vim.opt.updatetime = 50;
 
-opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = os.getenv("HOME") .. "/.nvim/undodir"
+vim.opt.undofile = true
 
--- Configure Neovim diagnostic messages
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
 
-local function prefix_diagnostic(prefix, diagnostic)
-  return string.format(prefix .. ' %s', diagnostic.message)
-end
+vim.opt.termguicolors = true;
 
-vim.diagnostic.config {
-  virtual_text = {
-    prefix = '',
-    format = function(diagnostic)
-      local severity = diagnostic.severity
-      if severity == vim.diagnostic.severity.ERROR then
-        return prefix_diagnostic('󰅚', diagnostic)
-      end
-      if severity == vim.diagnostic.severity.WARN then
-        return prefix_diagnostic('⚠', diagnostic)
-      end
-      if severity == vim.diagnostic.severity.INFO then
-        return prefix_diagnostic('ⓘ', diagnostic)
-      end
-      if severity == vim.diagnostic.severity.HINT then
-        return prefix_diagnostic('󰌶', diagnostic)
-      end
-      return prefix_diagnostic('■', diagnostic)
-    end,
-  },
-  signs = {
-    text = {
-      -- Requires Nerd fonts
-      [vim.diagnostic.severity.ERROR] = '󰅚',
-      [vim.diagnostic.severity.WARN] = '⚠',
-      [vim.diagnostic.severity.INFO] = 'ⓘ',
-      [vim.diagnostic.severity.HINT] = '󰌶',
-    },
-  },
-  update_in_insert = false,
-  underline = true,
-  severity_sort = true,
-  float = {
-    focusable = false,
-    style = 'minimal',
-    border = 'rounded',
-    source = 'if_many',
-    header = '',
-    prefix = '',
-  },
-}
+vim.opt.updatetime = 50;
 
-g.editorconfig = true
+vim.opt.scrolloff = 8
+vim.opt.signcolumn = "yes"
+vim.opt.isfname:append("@-@")
 
-vim.opt.colorcolumn = '100'
-
--- Native plugins
-cmd.filetype('plugin', 'indent', 'on')
-cmd.packadd('cfilter') -- Allows filtering the quickfix list with :cfdo
-
--- let sqlite.lua (which some plugins depend on) know where to find sqlite
-vim.g.sqlite_clib_path = require('luv').os_getenv('LIBSQLITE')

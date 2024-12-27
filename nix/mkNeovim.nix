@@ -1,4 +1,3 @@
-# Function for creating a Neovim derivation
 {
   pkgs,
   lib,
