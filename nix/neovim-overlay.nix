@@ -30,7 +30,7 @@ with final.pkgs.lib; let
     # https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=vimPlugins
     nvim-treesitter.withAllGrammars
     luasnip # snippets | https://github.com/l3mon4d3/luasnip/
-    # nvim-cmp (autocompletion) and extensions
+    nvim-cmp #(autocompletion) and extensions
     nvim-cmp # https://github.com/hrsh7th/nvim-cmp
     cmp_luasnip # snippets autocompletion extension for nvim-cmp | https://github.com/saadparwaiz1/cmp_luasnip/
     lspkind-nvim # vscode-like LSP pictograms | https://github.com/onsails/lspkind.nvim/
@@ -39,8 +39,6 @@ with final.pkgs.lib; let
     cmp-buffer # current buffer as completion source | https://github.com/hrsh7th/cmp-buffer/
     cmp-path # file paths as completion source | https://github.com/hrsh7th/cmp-path/
     cmp-nvim-lua # neovim lua API as completion source | https://github.com/hrsh7th/cmp-nvim-lua/
-    cmp-cmdline # cmp command line suggestions
-    cmp-cmdline-history # cmp command line history suggestions
     # ^ nvim-cmp extensions
     # git integration plugins
     diffview-nvim # https://github.com/sindrets/diffview.nvim/
@@ -53,8 +51,8 @@ with final.pkgs.lib; let
     telescope-smart-history-nvim # https://github.com/nvim-telescope/telescope-smart-history.nvim
     # ^ telescope and extensions
     # UI
-    lualine-nvim # Status line | https://github.com/nvim-lualine/lualine.nvim/
-    nvim-navic # Add LSP location to lualine | https://github.com/SmiteshP/nvim-navic
+    # lualine-nvim # Status line | https://github.com/nvim-lualine/lualine.nvim/
+    # nvim-navic # Add LSP location to lualine | https://github.com/SmiteshP/nvim-navic
     statuscol-nvim # Status column | https://github.com/luukvbaal/statuscol.nvim/
     nvim-treesitter-context # nvim-treesitter-context
 	transparent-nvim # transparent background 
@@ -83,26 +81,24 @@ with final.pkgs.lib; let
 	catppuccin-nvim
 
 	# autocomplete
-	vim-tabby
+	# vim-tabby
   ];
 
   extraPackages = with pkgs; [
     # language servers, etc.
     lua-language-server
     nil # nix LSP
-    tabby-agent
+    # tabby-agent
+	# nodejs
   ];
 in {
-  # This is the neovim derivation
-  # returned by the overlay
   nvim-pkg = mkNeovim {
     plugins = all-plugins;
     inherit extraPackages;
 
-	withNodeJs = true;
+	# withNodeJs = true;
   };
 
-  # This can be symlinked in the devShell's shellHook
   nvim-luarc-json = final.mk-luarc-json {
     plugins = all-plugins;
   };
